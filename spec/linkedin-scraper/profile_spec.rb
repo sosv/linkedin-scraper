@@ -155,4 +155,10 @@ describe Linkedin::Profile do
     end
   end
 
+  describe '#headline' do
+    it 'returns the headline of the profile' do
+      expect(profile.headline).to eq 'Presidential Innovation Fellow'
+    end
+  end
+
 end

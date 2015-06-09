@@ -24,7 +24,8 @@ module Linkedin
     organizations
     past_companies
     current_companies
-    recommended_visitors)
+    recommended_visitors
+    headline)
 
     attr_reader :page, :linkedin_url
 
@@ -171,6 +172,10 @@ module Linkedin
     def to_json
       require 'json'
       ATTRIBUTES.reduce({}){ |hash,attr| hash[attr.to_sym] = self.send(attr.to_sym);hash }.to_json
+    end
+
+    def headline
+      @headline ||= (@page.at('#headline').text.gsub(/\s+/, ' ').strip if @page.at('#headline'))
     end
 
     private
