@@ -11,7 +11,6 @@ module Linkedin
     last_name
     title
     location
-    country
     industry
     summary
     picture
@@ -57,11 +56,7 @@ module Linkedin
     end
 
     def location
-      @location ||= (@page.at('.locality').text.split(',').first.strip if @page.at('.locality'))
-    end
-
-    def country
-      @country ||= (@page.at('.locality').text.split(',').last.strip if @page.at('.locality'))
+      @location ||= (@page.at('.locality').text.strip if @page.at('.locality'))
     end
 
     def industry

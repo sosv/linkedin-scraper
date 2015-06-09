@@ -31,13 +31,7 @@ describe Linkedin::Profile do
 
   describe '#location' do
     it 'returns the location of the profile' do
-      expect(profile.location).to eq 'Seattle'
-    end
-  end
-
-  describe '#country' do
-    it 'returns the country of the profile' do
-      expect(profile.country).to eq 'Washington'
+      expect(profile.location).to eq 'Seattle, Washington'
     end
   end
 
