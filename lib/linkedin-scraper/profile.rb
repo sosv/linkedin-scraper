@@ -205,6 +205,8 @@ module Linkedin
 
           company_link = node.at('h4').next.at('a')['href'] if node.at('h4').next.at('a')
           company[:linkedin_company_url] = company_link
+
+          companies << company
           
         end
       end
