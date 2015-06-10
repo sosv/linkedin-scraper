@@ -161,4 +161,10 @@ describe Linkedin::Profile do
     end
   end
 
+  describe '#member_id' do
+    it 'returns the member id of the profile' do
+      expect(profile.member_id).to eq '21261553'
+    end
+  end
+
 end

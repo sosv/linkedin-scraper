@@ -25,7 +25,8 @@ module Linkedin
     past_companies
     current_companies
     recommended_visitors
-    headline)
+    headline
+    member_id)
 
     attr_reader :page, :linkedin_url
 
@@ -82,6 +83,10 @@ module Linkedin
 
     def current_companies
       @current_companies ||= get_companies('current')
+    end
+
+    def companies
+      current_companies + past_companies
     end
 
     def education
@@ -171,11 +176,15 @@ module Linkedin
 
     def to_json
       require 'json'
-      ATTRIBUTES.reduce({}){ |hash,attr| hash[attr.to_sym] = self.send(attr.to_sym);hash }.to_json
+      ATTRIBUTES.reduce({}){ |hash,attr| hash[attr.to_sym] = self.send(attr.to_sym); hash }.to_json
     end
 
     def headline
       @headline ||= (@page.at('#headline').text.gsub(/\s+/, ' ').strip if @page.at('#headline'))
+    end
+
+    def member_id
+      @member_id ||= (@page.at('.masthead')['id'].split('-').last if @page.at('.masthead'))
     end
 
     private
@@ -195,9 +204,8 @@ module Linkedin
           company[:end_date] = parse_date(end_date) rescue nil
 
           company_link = node.at('h4').next.at('a')['href'] if node.at('h4').next.at('a')
-
-          result = get_company_details(company_link)
-          companies << company.merge!(result)
+          company[:linkedin_company_url] = company_link
+          
         end
       end
       companies
