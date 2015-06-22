@@ -178,4 +178,11 @@ describe Linkedin::Profile do
       expect(profile.member_id).to eq '21261553'
     end
   end
+
+  describe '#num_connections' do
+    it 'returns number of connections' do
+      expect(profile.num_connections).to eq '500+'
+    end
+  end
+
 end

@@ -27,7 +27,8 @@ module Linkedin
     recommended_visitors
     headline
     member_id
-    similar_named)
+    num_connections
+    influencer?)
 
     attr_reader :page, :linkedin_url
 
@@ -137,7 +138,7 @@ module Linkedin
     def certifications
       @certifications ||= @page.search('background-certifications').map do |item|
         name       = item.at('h4').text.gsub(/\s+|\n/, ' ').strip                         rescue nil
-        authority  = item.at('h5').text.gsub(/\s+|\n/, ' ').strip            rescue nil
+        authority  = item.at('h5').text.gsub(/\s+|\n/, ' ').strip                         rescue nil
         license    = item.at('.specifics/.licence-number').text.gsub(/\s+|\n/, ' ').strip rescue nil
         start_date = item.at('.certification-date').text.gsub(/\s+|\n/, ' ').strip        rescue nil
 
@@ -198,10 +199,18 @@ module Linkedin
       @member_id ||= (@page.at('.masthead')['id'].split('-').last if @page.at('.masthead'))
     end
 
+    def num_connections
+      @num_connections ||= (@page.at('.member-connections').children.first.text if @page.at('.member-connections'))
+    end
+
+    def influencer?
+      @influencer ||= (!!@page.at('influencericon'))
+    end
+
     private
 
     def full_name
-      name_regex = /first=(.+)&last=(.+)/
+      name_regex = /first=(.+)&last=(.+)/ # this regex captures first and last name from the link
       link_with_name = @page.link_with(:text => /View more/)
       if link_with_name
         name_regex.match(link_with_name.href.gsub(/\+/, ' '))[1,2]
