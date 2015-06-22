@@ -5,7 +5,8 @@ describe Linkedin::Profile do
 
   let(:profile) { Linkedin::Profile.new('http://www.linkedin.com/in/jgrevich') }
   let(:profile_2) { Linkedin::Profile.new('http://www.linkedin.com/pub/bismarck-lepe/1/666/816') }
-  let(:profile_3) { Linkedin::Profile.new('https://www.linkedin.com/in/andrewwlee') }
+  let(:profile_3) { Linkedin::Profile.new('http://www.linkedin.com/in/andrewwlee') }
+  let(:profile_4) { Linkedin::Profile.new('http://www.linkedin.com/in/williamhgates') }
 
   describe '.get_profile' do
     it 'Create an instance of Linkedin::Profile class' do
@@ -139,10 +140,18 @@ describe Linkedin::Profile do
     end
   end
 
-  # WIP
   describe '#recommended_visitors' do
     it 'returns the array of hashes of recommended visitors' do
-      profile.recommended_visitors
+      expect(profile.recommended_visitors.count).to be == 10
+      expect(profile_2.recommended_visitors.count).to be == 10
+      expect(profile_4.recommended_visitors.count).to be == 10
+    end
+  end
+
+  describe '#similar_named' do
+    it 'returns the array of hashes of similar named people' do
+      expect(profile.similar_named.count).to be == 0
+      expect(profile_4.similar_named.count).to be == 5
     end
   end
 

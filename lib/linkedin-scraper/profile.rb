@@ -26,7 +26,8 @@ module Linkedin
     current_companies
     recommended_visitors
     headline
-    member_id)
+    member_id
+    similar_named)
 
     attr_reader :page, :linkedin_url
 
@@ -144,8 +145,19 @@ module Linkedin
       end
     end
 
+    def similar_named
+      @similar_named ||= @page.search('.same-name-search/ul/li').map do |visitor|
+        v = {}
+        v[:link]    = visitor.at('a')['href']
+        v[:name]    = visitor.at('h4/a').text
+        v[:title]   = visitor.at('.browse-map-title').text.gsub('...', ' ').split(' at ').first
+        v[:company] = visitor.at('.browse-map-title').text.gsub('...', ' ').split(' at ')[1]
+        v
+      end
+    end
+
     def recommended_visitors
-      @recommended_visitors ||= @page.search('.insights-browse-map/ul/li').map do |visitor|
+      @recommended_visitors ||= @page.search('.insights-browse-map:not(.same-name-search)/ul/li').map do |visitor|
         v = {}
         v[:link]    = visitor.at('a')['href']
         v[:name]    = visitor.at('h4/a').text
