@@ -5,6 +5,7 @@ describe Linkedin::Profile do
 
   let(:profile) { Linkedin::Profile.new('http://www.linkedin.com/in/jgrevich') }
   let(:profile_2) { Linkedin::Profile.new('http://www.linkedin.com/pub/bismarck-lepe/1/666/816') }
+  let(:profile_3) { Linkedin::Profile.new('https://www.linkedin.com/in/andrewwlee') }
 
   describe '.get_profile' do
     it 'Create an instance of Linkedin::Profile class' do
@@ -15,12 +16,14 @@ describe Linkedin::Profile do
   describe '#first_name' do
     it 'returns the first name of the profile' do
       expect(profile.first_name).to eq 'Justin'
+      expect(profile_3.first_name).to eq 'Andrew W'
     end
   end
 
   describe '#last_name' do
     it 'returns the last name of the profile' do
       expect(profile.last_name).to eq 'Grevich'
+      expect(profile_3.last_name).to eq 'Lee'
     end
   end
 

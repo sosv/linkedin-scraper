@@ -42,15 +42,15 @@ module Linkedin
     end
 
     def name
-      "#{first_name} #{last_name}"
+      full_name.join(' ')
     end
 
     def first_name
-      @first_name ||= (@page.at('.full-name').text.split(' ', 2)[0].strip if @page.at('.full-name'))
+      @first_name ||= (full_name.first)
     end
 
     def last_name
-      @last_name ||= (@page.at('.full-name').text.split(' ', 2)[1].strip if @page.at('.full-name'))
+      @last_name ||= (full_name.last)
     end
 
     def title
@@ -144,7 +144,6 @@ module Linkedin
       end
     end
 
-
     def recommended_visitors
       @recommended_visitors ||= @page.search('.insights-browse-map/ul/li').map do |visitor|
         v = {}
@@ -188,6 +187,14 @@ module Linkedin
     end
 
     private
+
+    def full_name
+      name_regex = /first=(.+)&last=(.+)/
+      link_with_name = @page.link_with(:text => /View more/)
+      if link_with_name
+        name_regex.match(link_with_name.href.gsub(/\+/, ' '))[1,2]
+      end
+    end
 
     def get_companies(type)
       companies = []
