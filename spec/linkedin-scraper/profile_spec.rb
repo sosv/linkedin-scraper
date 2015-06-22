@@ -4,6 +4,7 @@ require 'linkedin-scraper'
 describe Linkedin::Profile do
 
   let(:profile) { Linkedin::Profile.new('http://www.linkedin.com/in/jgrevich') }
+  let(:profile_2) { Linkedin::Profile.new('http://www.linkedin.com/pub/bismarck-lepe/1/666/816') }
 
   describe '.get_profile' do
     it 'Create an instance of Linkedin::Profile class' do
@@ -49,14 +50,14 @@ describe Linkedin::Profile do
 
   describe '#picture' do
     it 'returns the picture url of the profile' do
-      profile.picture
+      expect(profile.picture).to match(/\.jpg/)
     end
   end
 
   describe '#skills' do
-    pending 'returns the array of skills of the profile' do
-      skills = ['Ruby', 'Ruby on Rails', 'Web Development', 'Web Applications', 'CSS3', 'HTML 5', 'Shell Scripting', 'Python', 'Chef', 'Git', 'Subversion', 'JavaScript', 'Rspec', 'jQuery', 'Capistrano', 'Sinatra', 'CoffeeScript', 'Haml', 'Standards Compliance', 'MySQL', 'PostgreSQL', 'Solr', 'Sphinx', 'Heroku', 'Amazon Web Services (AWS)', 'Information Security', 'Vulnerability Assessment', 'SAN', 'ZFS', 'Backup Solutions', 'SaaS', 'System Administration', 'Project Management', 'Linux', 'Troubleshooting', 'Network Security', 'OS X', 'Bash', 'Cloud Computing', 'Web Design', 'MongoDB', 'Z-Wave', 'Home Automation']
-      expect(profile.skills).to include(*skills)
+    it 'returns the array of skills of the profile' do
+      arr = ['Ruby', 'Ruby on Rails', 'Web Development', 'Web Applications', 'REST', 'Drupal', 'CSS']
+      expect(profile.skills).to include(*arr)
     end
   end
 
@@ -86,7 +87,8 @@ describe Linkedin::Profile do
 
   describe '#groups' do
     it 'returns the array of hashes of groups with details' do
-      profile.groups
+      expect(profile.groups.class).to eq Array
+      expect(profile.groups.any? { |m| m[:name] == 'Rubyists' }).to eq true
     end
   end
 
@@ -96,33 +98,31 @@ describe Linkedin::Profile do
     end
   end
 
-  describe '#organizations' do
-    pending 'returns an array of organization hashes for the profile' do
-      expect(profile.organizations.class).to eq Array
-      expect(profile.organizations.first[:name]).to eq 'San Diego Ruby'
-    end
-  end
+  # describe '#organizations' do
+  #   pending 'returns an array of organization hashes for the profile' do
+  #     expect(profile.organizations.class).to eq Array
+  #     expect(profile.organizations.first[:name]).to eq 'Python Community'
+  #   end
+  # end
 
   describe '#languages' do
     it 'returns an array of languages hashes' do
-      expect(profile.languages.class).to eq Array
+      expect(profile_2.languages.class).to eq Array
     end
 
-    context 'with language data' do
-      it 'returns an array with one language hash' do
-        expect(profile.languages.class).to eq Array
+    it 'returns an array with one language hash' do
+      expect(profile_2.languages.class).to eq Array
+    end
+
+    describe 'language hash' do
+      it 'contains the key and value for language name' do
+        expect(profile_2.languages.first[:language]).to eq 'English'
       end
 
-      describe 'language hash' do
-        pending 'contains the key and value for language name' do
-          expect(profile.languages.first[:language]).to eq 'English'
-        end
-
-        pending 'contains the key and value for language proficiency' do
-          expect(profile.languages.first[:proficiency]).to eq 'Native or bilingual proficiency'
-        end
+      it 'contains the key and value for language proficiency' do
+        expect(profile_2.languages.first[:proficiency]).to eq 'Native or bilingual proficiency'
       end
-    end # context 'with language data' do
+    end
 
   end # describe '.languages' do
 
@@ -166,5 +166,4 @@ describe Linkedin::Profile do
       expect(profile.member_id).to eq '21261553'
     end
   end
-
 end
