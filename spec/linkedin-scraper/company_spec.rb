@@ -3,7 +3,7 @@ require 'linkedin-scraper'
 
 describe Linkedin::Company do
   let(:company) { Linkedin::Company.new('http://www.linkedin.com/company/1337') }
-  let(:company_2) { Linkedin::Company.new('') }
+  let(:company_2) { Linkedin::Company.new('http://www.linkedin.com/company/zynga') }
 
   describe '#company_id' do
     it { expect(company.company_id).to eq '1337' }
@@ -63,6 +63,36 @@ describe Linkedin::Company do
     it { expect(company.year_founded).to eq 2003 }
   end
 
+  describe '#street_1' do
+    it { expect(company.street_1).to eq '2029 Stierlin Court' }
+    it { expect(company_2.street_1).to eq nil }
+  end
+
+  describe '#street_2' do
+    it { expect(company.street_2).to eq '' }
+    it { expect(company_2.street_2).to eq nil }
+  end
+
+  describe '#locality' do
+    it { expect(company.locality).to eq 'Mountain View' }
+    it { expect(company_2.locality).to eq nil }
+  end
+
+  describe '#region' do
+    it { expect(company.region).to eq 'CA' }
+    it { expect(company_2.region).to eq nil }
+  end
+
+  describe '#postal_code' do
+    it { expect(company.postal_code).to eq '94043' }
+    it { expect(company_2.postal_code).to eq nil }
+  end
+
+  describe '#country' do
+    it { expect(company.country).to eq 'United States' }
+    it { expect(company_2.country).to eq nil }
+  end
+
   describe '#related_companies' do
 
   end
@@ -79,9 +109,11 @@ describe Linkedin::Company do
 
   end
   
-  
   describe '#address' do
-    
+    it 'returns a formatted address string' do
+      expect(company.address).to eq('2029 Stierlin Court, Mountain View, CA 94043 United States')
+      expect(company_2.address).to eq('')
+    end  
   end
   
   describe '#listed_employees' do

@@ -5,6 +5,7 @@ module Linkedin
     USER_AGENTS = ['Windows IE 6', 'Windows IE 7', 'Windows Mozilla', 'Mac Safari', 'Mac FireFox', 'Mac Mozilla', 'Linux Mozilla', 'Linux Firefox', 'Linux Konqueror']
 
     ATTRIBUTES = %w(
+      linkedin_url
       company_id
       profile_url
       description
@@ -16,7 +17,14 @@ module Linkedin
       num_followers
       type
       size
-      year_founded)
+      year_founded
+      street_1
+      street_2
+      locality
+      region
+      postal_code
+      country
+      address)
 
     attr_reader :page, :linkedin_url
 
@@ -75,9 +83,37 @@ module Linkedin
       @year_founded ||= (@page.at('.founded/p').text.to_i if @page.at('.founded/p'))
     end
 
-    # def x
-      # @x ||= (@page.at('') if @page.at(''))
-    # end
+    def street_1
+      @street_1 ||= (@page.search('.street-address').first.text unless @page.search('.street-address').empty?)
+    end
+
+    def street_2
+      @street_2 ||= (@page.search('.street-address').last.text unless @page.search('.street-address').empty?)
+    end
+
+    def locality
+      @locality ||= (@page.at('.locality').text.gsub(/,$/, '') if @page.at('.locality'))
+    end
+
+    def region
+      @region ||= (@page.at('.region').text if @page.at('.region'))
+    end
+
+    def postal_code
+      @postal_code ||= (@page.at('.postal-code').text if @page.at('.postal-code'))
+    end
+
+    def country
+      @country ||= (@page.at('.country-name').text if @page.at('.country-name'))
+    end
+
+    def address
+      if street_1
+        [street_1, street_2, ',', locality, ',', region, postal_code, country].join(' ').gsub(/\s{1,2},/, ',')
+      else
+        ''
+      end
+    end
 
     def self.get_company(url)
       Linkedin::Company.new(url)
