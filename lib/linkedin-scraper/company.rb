@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 module Linkedin
   class Company
-
     USER_AGENTS = ['Windows IE 6', 'Windows IE 7', 'Windows Mozilla', 'Mac Safari', 'Mac FireFox', 'Mac Mozilla', 'Linux Mozilla', 'Linux Firefox', 'Linux Konqueror']
-
     ATTRIBUTES = %w(
       linkedin_url
       company_id
@@ -128,7 +126,7 @@ module Linkedin
 
     def to_json
       require 'json'
-      ATTRIBUTES.reduce({}){ |hash,attr| hash[attr.to_sym] = self.send(attr.to_sym); hash }.to_json
+      ATTRIBUTES.reduce({}) { |hash,attr| hash[attr.to_sym] = self.send(attr.to_sym); hash }.to_json
     end
 
     private
@@ -139,6 +137,5 @@ module Linkedin
         agent.max_history = 0
       end
     end
-
   end
 end
