@@ -1,5 +1,15 @@
 #!/usr/bin/env ruby
 
 require_relative '../lib/linkedin-scraper'
-profile = Linkedin::Profile.new(ARGV[0])
-puts JSON.pretty_generate JSON.parse(profile.to_json)
+arg = ARGV[0]
+if /\/company\//i.match(arg)
+  company = Linkedin::Company.new(arg)
+  puts JSON.pretty_generate JSON.parse(company.to_json)
+elsif /(\/pub\/|\/in\/)/i.match(arg)
+  profile = Linkedin::Profile.new(ARGV[0])
+  puts JSON.pretty_generate JSON.parse(profile.to_json)
+else
+  puts 'Need a valid LinkedIn profile or company page as the argument.'
+  puts 'Example: linkedin-scraper https://www.linkedin.com/in/jeffweiner08'
+  puts 'Example: linkedin-scraper https://www.linkedin.com/company/linkedin'
+end
