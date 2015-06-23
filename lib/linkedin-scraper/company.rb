@@ -4,9 +4,80 @@ module Linkedin
 
     USER_AGENTS = ['Windows IE 6', 'Windows IE 7', 'Windows Mozilla', 'Mac Safari', 'Mac FireFox', 'Mac Mozilla', 'Linux Mozilla', 'Linux Firefox', 'Linux Konqueror']
 
-    ATTRIBUTES = %w()
+    ATTRIBUTES = %w(
+      company_id
+      profile_url
+      description
+      specialties
+      logo
+      industry
+      name
+      website
+      num_followers
+      type
+      size
+      year_founded)
 
     attr_reader :page, :linkedin_url
+
+    def company_id
+      if @page.at('.public-follow')
+        id_capture_regex = /id=(\d+)/
+        @company_id ||= (id_capture_regex.match(URI.unescape(@page.at('.public-follow')['href']))[1])
+      end
+    end
+
+    def profile_url
+      @profile_url ||= (@page.at('meta[@property="og:url"]')[:content] if @page.at('meta[@property="og:url"]'))
+    end
+
+    def description
+      @description ||= (@page.at('.basic-info-description').text.strip if @page.at('.basic-info-description'))
+    end
+
+    def specialties
+      if @page.at('.specialties/p')
+        @specialties ||= (@page.at('.specialties/p').text.split(',').map(&:strip))
+      end
+    end
+
+    def logo
+      @logo ||= (@page.at('.image-wrapper/img')['src'] if @page.at('.image-wrapper/img'))
+    end
+
+    def industry
+      @industry ||= (@page.at('.industry/p').text if @page.at('.industry/p'))
+    end
+
+    def name
+      @name ||= (@page.at('meta[@property="og:title"]')[:content] if @page.at('meta[@property="og:title"]'))
+    end
+
+    def website
+      @website ||= (@page.at('.website a').text if @page.at('.website a'))
+    end
+
+    def num_followers
+      if @page.at('.followers-count')
+        @num_followers ||= (@page.at('.followers-count').children.first.text.gsub(',', '').to_i)
+      end
+    end
+
+    def type
+      @type ||= (@page.at('.type/p').text.strip if @page.at('.type/p'))
+    end
+
+    def size
+      @size ||= (@page.at('.company-size/p').text.strip.split(' ').first if @page.at('.company-size/p'))
+    end
+
+    def year_founded
+      @year_founded ||= (@page.at('.founded/p').text.to_i if @page.at('.founded/p'))
+    end
+
+    # def x
+      # @x ||= (@page.at('') if @page.at(''))
+    # end
 
     def self.get_company(url)
       Linkedin::Company.new(url)

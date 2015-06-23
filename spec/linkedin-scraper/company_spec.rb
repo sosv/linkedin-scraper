@@ -6,7 +6,7 @@ describe Linkedin::Company do
   let(:company_2) { Linkedin::Company.new('') }
 
   describe '#company_id' do
-    it { expect(company.company_id).to be eq '1337' }
+    it { expect(company.company_id).to eq '1337' }
   end
 
   describe '#profile_url' do
@@ -41,14 +41,14 @@ describe Linkedin::Company do
     it { expect(company.name).to eq 'LinkedIn' }
   end
   
-  describe '#url' do
+  describe '#website' do
     it 'returns the company website url' do
-      expect(company.url).to eq 'http://www.linkedin.com'
+      expect(company.website).to eq 'http://www.linkedin.com'
     end
   end
   
-  describe '#followers' do
-    it { expect(company.followers).to be >= 1000000 }
+  describe '#num_followers' do
+    it { expect(company.num_followers).to be >= 1000000 }
   end
   
   describe '#type' do
@@ -60,7 +60,7 @@ describe Linkedin::Company do
   end
 
   describe '#year_founded' do
-    it { expect(company.year_founded).to eq '2013' }
+    it { expect(company.year_founded).to eq 2003 }
   end
 
   describe '#related_companies' do
