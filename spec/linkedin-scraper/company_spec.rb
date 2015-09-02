@@ -4,6 +4,7 @@ require 'linkedin-scraper'
 describe Linkedin::Company do
   let(:company) { Linkedin::Company.new('http://www.linkedin.com/company/1337') }
   let(:company_2) { Linkedin::Company.new('http://www.linkedin.com/company/zynga') }
+  let(:company_3) { Linkedin::Company.new('http://www.linkedin.com/company/wizeline') }
 
   describe '#company_id' do
     it { expect(company.company_id).to eq '1337' }
@@ -11,7 +12,7 @@ describe Linkedin::Company do
 
   describe '#profile_url' do
     it 'returns the linkedin company page url' do
-      expect(company.profile_url).to eq 'http://www.linkedin.com/company/linkedin'
+      expect(company.profile_url).to match 'www.linkedin.com/company/linkedin'
     end
   end
 
@@ -43,7 +44,7 @@ describe Linkedin::Company do
   
   describe '#website' do
     it 'returns the company website url' do
-      expect(company.website).to eq 'http://www.linkedin.com'
+      expect(company.website).to match 'www.linkedin.com'
     end
   end
   
@@ -69,8 +70,9 @@ describe Linkedin::Company do
   end
 
   describe '#street_2' do
-    it { expect(company.street_2).to eq '' }
+    it { expect(company.street_2).to eq nil }
     it { expect(company_2.street_2).to eq nil }
+    it { expect(company_3.street_2).to eq 'Suite 1350' }
   end
 
   describe '#locality' do

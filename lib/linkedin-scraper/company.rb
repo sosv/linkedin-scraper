@@ -86,7 +86,7 @@ module Linkedin
     end
 
     def street_2
-      @street_2 ||= (@page.search('.street-address').last.text unless @page.search('.street-address').empty?)
+      @street_2 ||= (@page.search('.street-address').last.text if @page.search('.street-address').count == 2)
     end
 
     def locality
