@@ -207,8 +207,8 @@ module Linkedin
     private
 
     def full_name
-      name_regex = /first=(.+)&last=(.+)/ # this regex captures first and last name from the link
-      link_with_name = @page.link_with(text: /View more/)
+      name_regex = /pub\/dir\/\?first=(.+)&last=(.+)/ # this regex captures first and last name from the link
+      link_with_name = @page.link_with(href: name_regex)
       name_regex.match(link_with_name.href.gsub(/\+/, ' '))[1, 2] if link_with_name
     end
 
