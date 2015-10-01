@@ -4,9 +4,9 @@ require 'spec_helper'
 require 'linkedin_scraper'
 
 describe Linkedin::Company do
-  let(:company) { Linkedin::Company.new('http://www.linkedin.com/company/1337') }
-  let(:company_2) { Linkedin::Company.new('http://www.linkedin.com/company/zynga') }
-  let(:company_3) { Linkedin::Company.new('http://www.linkedin.com/company/wizeline') }
+  let(:company) { Linkedin::Company.new("file://#{File.absolute_path(File.dirname(__FILE__) + '/../fixtures/1337.html')}") }
+  let(:company_2) { Linkedin::Company.new("file://#{File.absolute_path(File.dirname(__FILE__) + '/../fixtures/zynga.html')}") }
+  let(:company_3) { Linkedin::Company.new("file://#{File.absolute_path(File.dirname(__FILE__) + '/../fixtures/wizeline.html')}") }
 
   describe '#company_id' do
     it { expect(company.company_id).to eq '1337' }
@@ -72,7 +72,7 @@ describe Linkedin::Company do
   end
 
   describe '#street_2' do
-    it { expect(company.street_2).to eq nil }
+    it { expect(company.street_2).to eq '' }
     it { expect(company_2.street_2).to eq nil }
     it { expect(company_3.street_2).to eq 'Suite 1350' }
   end
