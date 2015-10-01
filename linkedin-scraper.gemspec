@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($\)
   gem.executables   = ['linkedin-scraper']
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = 'mirari-linkedin'
+  gem.name          = 'linkedin-scraper'
   gem.require_paths = ['lib']
   gem.version       = Linkedin::Scraper::VERSION
 
